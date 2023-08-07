@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>[조인트리X스마트인재개발원] SW캠프</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<div th:if="${session.loginUser != null}">
+		<span th:text="${session.loginUser.getUserid()}"></span><span>님 환영합니다!!!</span>
+		<button type="button" onclick="location.href='/upload'">글작성</button>
+		<button type="button" onclick="location.href='/logout'">로그아웃</button>
+	</div>
+	<table>
+		<thead>
+		<tr>
+			<th>카테고리</th>
+			<th>글제목</th>
+			<th>작성자</th>
+			<th>작성일시</th>
+			<th>게시글 보기</th>
+		</tr>
+		</thead>
+		<tbody id="allPosts">
+		</tbody>
+	</table>
+	
+	<!-- script -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+	
+		var allPosts = document.getElementById('allPosts');
+		allPosts.innerHTML = '';
+	
+		$.ajax({
+			type: 'GET',
+			url: '/post',
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+		})
+		.done((result)=>{
+			var tableBody = '';
+			result.forEach(function(item){
+				tableBody += '<tr>' +
+					'<td>' + item.category.category_name + '</td>' + 
+					'<td>' + item.title + '</td>' + 
+					'<td>' + item.users.userid + '</td>' + 
+					'<td>' + item.createAt + '</td>' +
+					'<td><button onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+					'</tr>';
+			})
+			allPosts.innerHTML = tableBody;
+			console.log(result);
+		})
+		.fail((error)=>{
+			console.log(error);
+		});
+		
+	
+	</script>
+	
+</body>
+</html>

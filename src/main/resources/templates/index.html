@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>[조인트리X스마트인재개발원] SW캠프</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<div th:if="${session.loginUser == null}">
+	<form method="post" action="/login">
+		<input type="text" name="userid" placeholder="아이디">
+		<input type="password" name="userpw" placeholder="비밀번호">
+		<input type="submit" value="로그인">
+	</form>
+	<button onclick="location.href = '/join'">회원가입</button>
+	</div>
+	<div th:if="${session.loginUser != null}">
+		<span th:text="${session.loginUser.getUserid()}"></span><span>님 환영합니다!!!</span>
+		<button type="button" onclick="location.href='/upload'">글작성</button>
+		<button type="button" onclick="location.href='/logout'">로그아웃</button>
+	</div>
+</body>
+</html>
