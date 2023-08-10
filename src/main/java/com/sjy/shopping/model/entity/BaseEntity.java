@@ -25,15 +25,15 @@ public class BaseEntity {
 	@Column(updatable = false)
 	private LocalDateTime createAt;
 	
-	@CreatedBy
-	@Column(updatable = false)
-	private String createdBy;
+//	@CreatedBy
+//	@Column(updatable = false)
+//	private String createdBy;
 	
 	@LastModifiedDate
 	@Column(updatable = false)
 	private LocalDateTime modifiedAt;
 	
-	@LastModifiedBy
-	private String modifiedBy;
+//	@LastModifiedBy
+//	private String modifiedBy;
 
 }

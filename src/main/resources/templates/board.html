@@ -1,62 +1,95 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>[조인트리X스마트인재개발원] SW캠프</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>게시판 by sjy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .highlight {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
-	<div th:if="${session.loginUser != null}">
-		<span th:text="${session.loginUser.getUserid()}"></span><span>님 환영합니다!!!</span>
-		<button type="button" onclick="location.href='/upload'">글작성</button>
-		<button type="button" onclick="location.href='/logout'">로그아웃</button>
-	</div>
-	<table>
-		<thead>
-		<tr>
-			<th>카테고리</th>
-			<th>글제목</th>
-			<th>작성자</th>
-			<th>작성일시</th>
-			<th>게시글 보기</th>
-		</tr>
-		</thead>
-		<tbody id="allPosts">
-		</tbody>
-	</table>
-	
-	<!-- script -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script>
-	
-		var allPosts = document.getElementById('allPosts');
-		allPosts.innerHTML = '';
-	
-		$.ajax({
-			type: 'GET',
-			url: '/post',
-			dataType: 'json',
-			contentType: 'application/json; charset=utf-8',
-		})
-		.done((result)=>{
-			var tableBody = '';
-			result.forEach(function(item){
-				tableBody += '<tr>' +
-					'<td>' + item.category.category_name + '</td>' + 
-					'<td>' + item.title + '</td>' + 
-					'<td>' + item.users.userid + '</td>' + 
-					'<td>' + item.createAt + '</td>' +
-					'<td><button onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
-					'</tr>';
-			})
-			allPosts.innerHTML = tableBody;
-			console.log(result);
-		})
-		.fail((error)=>{
-			console.log(error);
-		});
-		
-	
-	</script>
-	
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div th:if="${session.loginUser != null}">
+                <span class="highlight" th:text="${session.loginUser.getNick()}"></span><span>님 환영합니다!!!</span>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="location.href='/upload'">글작성</button>
+                <button class="btn btn-danger" th:onclick="'location.href=\'/admin/' + @{${session.loginUser.getUserid()}} + '\''" >마이페이지</button>
+                <button class="btn btn-danger" onclick="location.href='/logout'">로그아웃</button>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <select id="categorySelection" onClick="showCategory()">
+                           
+                        </select>
+                    </th>
+                    <th>글제목</th>
+                    <th>작성자</th>
+                    <th>작성일시</th>
+                    <th>게시글 보기</th>
+                </tr>
+            </thead>
+            <tbody id="allPosts">
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        var allPosts = document.getElementById('allPosts');
+        allPosts.innerHTML = '';
+    
+        $.ajax({
+            type: 'GET',
+            url: '/post/findall',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+        })
+        .done((result)=>{
+            var tableBody = '';
+            result.forEach(function(item){
+                tableBody += '<tr>' +
+                    '<td>' + item.category.category_name + '</td>' + 
+                    '<td>' + item.title + '</td>' + 
+                    '<td>' + item.users.userid + '</td>' + 
+                    '<td>' + item.createAt + '</td>' +
+                    '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                    '</tr>';
+            })
+            allPosts.innerHTML = tableBody;
+        })
+        .fail((error)=>{
+            console.log(error);
+        });
+        
+        function showCategory(){
+        	let categoryOptions = document.getElementById("categorySelection");
+        	categoryOptions.innerHTML = '';
+        	
+        	$.ajax({
+        		type: 'GET',
+        		url: '/category/select',
+        		dataType: 'json',
+        		contentType: 'application/json; charset=utf-8'
+        	}).done((result)=>{
+        		let options = '';
+        			options += '<option>카테고리</option>'
+        		result.forEach(function(item){
+        			options += '<option>' + item.category_name + '</option>';
+        		})
+        		categoryOptions.innerHTML = options;
+        	}).fail((error)=>{
+        		console.log(error)
+        	})
+        }
+    </script>
 </body>
 </html>

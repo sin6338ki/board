@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>[조인트리X스마트인재개발원] SW캠프</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>게시판 by sjy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-	<div th:if="${session.loginUser == null}">
-	<form method="post" action="/login">
-		<input type="text" name="userid" placeholder="아이디">
-		<input type="password" name="userpw" placeholder="비밀번호">
-		<input type="submit" value="로그인">
-	</form>
-	<button onclick="location.href = '/join'">회원가입</button>
-	</div>
-	<div th:if="${session.loginUser != null}">
-		<span th:text="${session.loginUser.getUserid()}"></span><span>님 환영합니다!!!</span>
-		<button type="button" onclick="location.href='/upload'">글작성</button>
-		<button type="button" onclick="location.href='/logout'">로그아웃</button>
-	</div>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1>기본 게시판</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div th:if="${session.loginUser == null}">
+                    <form class="text-center" method="post" action="/login">
+                        <input class="form-control mb-3" type="text" name="userid" placeholder="아이디">
+                        <input class="form-control mb-3" type="password" name="userpw" placeholder="비밀번호">
+                        <input class="btn btn-primary btn-block mb-2" type="submit" value="로그인">
+                    </form>
+                    <button class="btn btn-secondary btn-block" onclick="location.href = '/join'">회원가입</button>
+                </div>
+                <div class="text-center mt-4" th:if="${session.loginUser != null}">
+                    <p class="font-weight-bold" th:text="${session.loginUser.getNick()} + '님 환영합니다!!!'"></p>
+                    <button class="btn btn-success" onclick="location.href='/list'">게시글 리스트</button>
+                    <button class="btn btn-success" onclick="location.href='/upload'">글작성</button>
+                    <button class="btn btn-danger" onclick="location.href='/logout'">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

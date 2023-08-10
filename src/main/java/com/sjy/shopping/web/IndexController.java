@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.sjy.shopping.model.entity.Posts;
 import com.sjy.shopping.service.PostService;
@@ -38,18 +37,27 @@ public class IndexController {
 	public String index() {
 		return "index";
 	}
-	
-//	@GetMapping("/list/{id}")
-//	public String listContent() {
-//		return "boardContent";
-//	}
-	
+
 	//특정 게시물 조회
 	@GetMapping("/post/{id}")
 	public String findPost(@PathVariable(name="id") Long id, HttpServletResponse response, Model model, HttpSession session) throws Exception {
 		Posts posts = postService.findPost(id);
 		Model m = model.addAttribute("post", posts);
 		return "boardContent";
+	}
+	
+	//마이페이지 이동
+	@GetMapping("/admin/{id}")
+	public String admin(@PathVariable(name="id") String id, HttpSession session) {
+		return "admin";
+	}
+	
+	//게시물 수정 페이지로 이동 
+	@GetMapping("/post/update/{id}")
+	public String updatePost(@PathVariable(name="id") Long id, Model model) {
+		Posts posts = postService.findPost(id);
+		Model m = model.addAttribute("post", posts);
+		return "update";
 	}
 
 }

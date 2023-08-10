@@ -54,6 +54,6 @@ public class userController {
 	@GetMapping("/logout")
 	public void logout(HttpServletResponse response, HttpSession session) throws Exception {
 		session.invalidate();
-		response.sendRedirect("/list");
+		response.sendRedirect("/");
 	}
 }

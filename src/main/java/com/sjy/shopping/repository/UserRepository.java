@@ -11,4 +11,6 @@ import com.sjy.shopping.model.entity.Users;
 public interface UserRepository extends JpaRepository<Users, Long> {
 	@Query("select u from users u where u.userid = :userid and u.userpw = :userpw")
 	Users findByUseridAndUserpw(@Param("userid")String userid, @Param("userpw")String userpw);
+	
+	Users findByUserid(@Param("userid")String userid);
 }
