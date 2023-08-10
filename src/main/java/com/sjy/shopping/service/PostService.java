@@ -63,5 +63,17 @@ public class PostService {
 	public void deletePost(Long id) {
 		postRepository.deleteById(id);
 	}
+	
+	@Transactional
+	public List<Posts> findByCategoryByUserPosts(String category_name, Users user){
+		Category category = categoryRepository.findByName(category_name);
+		return postRepository.findAllByUsersAndCategory(user, category);
+	}
+	
+	@Transactional
+	public List<Posts> findByCategoryPosts(String category_name){
+		Category category = categoryRepository.findByName(category_name);
+		return postRepository.findAllByCategory(category);
+	}
 
 }

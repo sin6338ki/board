@@ -72,4 +72,18 @@ public class postController {
     	String userId = user.getUserid();
     	response.sendRedirect("/admin/" + userId);
     }
+    
+    //카테고리별 유저별 게시글 불러오기
+    @GetMapping("post/findbycategoryanduser/{category}")
+    public List<Posts> findByCategoryByUserPosts(@PathVariable(name="category") String category_name, HttpSession session){
+    	Users user = (Users)session.getAttribute("loginUser");
+    	return postService.findByCategoryByUserPosts(category_name, user);
+    }
+    
+    //카테고리별 게시글 불러오기
+    @GetMapping("post/findbycategory/{category}")
+    public List<Posts> findByCategoryPosts(@PathVariable(name="category") String category_name){
+    	return postService.findByCategoryPosts(category_name);
+    }
+    
 }

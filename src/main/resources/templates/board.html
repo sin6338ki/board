@@ -27,8 +27,7 @@
             <thead>
                 <tr>
                     <th>
-                        <select id="categorySelection" onClick="showCategory()">
-                           
+       	              <select id="categorySelection" th:onChange="categorySelectionChanged(this.value)">
                         </select>
                     </th>
                     <th>글제목</th>
@@ -44,31 +43,48 @@
     
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        var allPosts = document.getElementById('allPosts');
-        allPosts.innerHTML = '';
     
-        $.ajax({
-            type: 'GET',
-            url: '/post/findall',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-        })
-        .done((result)=>{
-            var tableBody = '';
-            result.forEach(function(item){
-                tableBody += '<tr>' +
-                    '<td>' + item.category.category_name + '</td>' + 
-                    '<td>' + item.title + '</td>' + 
-                    '<td>' + item.users.userid + '</td>' + 
-                    '<td>' + item.createAt + '</td>' +
-                    '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
-                    '</tr>';
+    	showCategory();
+    	postAll();
+    	
+    	var selectedCategory = "";
+    
+	    function categorySelectionChanged(category) {
+	        selectedCategory = category;
+	        if (selectedCategory === "all") {
+	            postAll(); // 전체 카테고리 선택 시 전체 게시글 호출
+	        } else {
+	            postsByCategory(selectedCategory); // 다른 카테고리 선택 시 해당 카테고리 게시글 호출
+	        }
+	    }
+        
+    	function postAll(){
+    		var allPosts = document.getElementById('allPosts');
+            allPosts.innerHTML = '';
+        
+            $.ajax({
+                type: 'GET',
+                url: '/post/findall',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
             })
-            allPosts.innerHTML = tableBody;
-        })
-        .fail((error)=>{
-            console.log(error);
-        });
+            .done((result)=>{
+                var tableBody = '';
+                result.forEach(function(item){
+                    tableBody += '<tr>' +
+                        '<td>' + item.category.category_name + '</td>' + 
+                        '<td>' + item.title + '</td>' + 
+                        '<td>' + item.users.userid + '</td>' + 
+                        '<td>' + item.createAt + '</td>' +
+                        '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                        '</tr>';
+                })
+                allPosts.innerHTML = tableBody;
+            })
+            .fail((error)=>{
+                console.log(error);
+            });
+    	}
         
         function showCategory(){
         	let categoryOptions = document.getElementById("categorySelection");
@@ -81,14 +97,43 @@
         		contentType: 'application/json; charset=utf-8'
         	}).done((result)=>{
         		let options = '';
-        			options += '<option>카테고리</option>'
+        			options += '<option value="all" selected>카테고리</option>'
         		result.forEach(function(item){
-        			options += '<option>' + item.category_name + '</option>';
+        			options += '<option value="' + item.category_name + '">' + item.category_name + '</option>';
         		})
         		categoryOptions.innerHTML = options;
         	}).fail((error)=>{
         		console.log(error)
         	})
+        }
+        
+        function postsByCategory(category){
+        	let categoryOptions = document.getElementById("allPosts")
+        	allPosts.innerHTML = '';
+            
+            $.ajax({
+                type: 'GET',
+                url: '/post/findbycategory/' + category,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+            })
+            .done((result)=>{
+            	console.log("result", result)
+                var tableBody = '';
+                result.forEach(function(item){
+                    tableBody += '<tr>' +
+                        '<td>' + item.category.category_name + '</td>' + 
+                        '<td>' + item.title + '</td>' + 
+                        '<td>' + item.users.userid + '</td>' + 
+                        '<td>' + item.createAt + '</td>' +
+                        '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                        '</tr>';
+                })
+                allPosts.innerHTML = tableBody;
+            })
+            .fail((error)=>{
+                console.log(error);
+            });
         }
     </script>
 </body>

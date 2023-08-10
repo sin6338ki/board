@@ -27,9 +27,8 @@
             <thead>
                 <tr>
                     <th>
-                    	<select name="categorySelection">
-                    		<option></option>
-                    	</select>
+       	              <select id="categorySelection" th:onChange="categorySelectionChanged(this.value)">
+                        </select>
                     </th>
                     <th>글제목</th>
                     <th>작성자</th>
@@ -45,6 +44,20 @@
     
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
+    
+	showCategory();
+	postAll();
+    
+    function categorySelectionChanged(category) {
+        selectedCategory = category;
+        if (selectedCategory === "all") {
+            postAll(); // 전체 카테고리 선택 시 전체 게시글 호출
+        } else {
+        	postsByCategoryByUser(selectedCategory); // 다른 카테고리 선택 시 해당 카테고리 게시글 호출
+        }
+    }
+    
+    function postAll(){
         var allPosts = document.getElementById('allPosts');
         allPosts.innerHTML = '';
     
@@ -71,6 +84,59 @@
         .fail((error)=>{
             console.log(error);
         });
+    }
+
+        
+        function showCategory(){
+        	let categoryOptions = document.getElementById("categorySelection");
+        	categoryOptions.innerHTML = '';
+        	
+        	$.ajax({
+        		type: 'GET',
+        		url: '/category/select',
+        		dataType: 'json',
+        		contentType: 'application/json; charset=utf-8'
+        	}).done((result)=>{
+        		let options = '';
+        			options += '<option selected>카테고리</option>'
+        		result.forEach(function(item){
+        			options += '<option value="' + item.category_name + '">' + item.category_name + '</option>';
+        		})
+        		categoryOptions.innerHTML = options;
+        	}).fail((error)=>{
+        		console.log(error)
+        	})
+        }
+        
+        function postsByCategoryByUser(category){
+        	console.log("실행 : ", category)
+        	let categoryOptions = document.getElementById("allPosts")
+        	allPosts.innerHTML = '';
+            
+            $.ajax({
+                type: 'GET',
+                url: '/post/findbycategoryanduser/' + category,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+            })
+            .done((result)=>{
+            	console.log("result", result)
+                var tableBody = '';
+                result.forEach(function(item){
+                    tableBody += '<tr>' +
+                        '<td>' + item.category.category_name + '</td>' + 
+                        '<td>' + item.title + '</td>' + 
+                        '<td>' + item.users.userid + '</td>' + 
+                        '<td>' + item.createAt + '</td>' +
+                        '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                        '</tr>';
+                })
+                allPosts.innerHTML = tableBody;
+            })
+            .fail((error)=>{
+                console.log(error);
+            });
+        }
     </script>
     
 </body>
