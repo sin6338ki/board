@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,12 @@ public class Comments extends BaseEntity{
 	private Posts posts;
 	
 	private String comment;
+	
+	@Builder
+	public Comments(Users users, String comment, Posts post) {
+		this.users = users;
+		this.comment = comment;
+		this.posts = post;
+	}
+	
 }

@@ -61,12 +61,84 @@
                     </div>
                     <div class="panel-footer"></div>
                 </div>
+				<div class="panel panel-default">
+                    <div class="panel-heading">댓글</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                        	<thead>
+                            <tr>
+                                <td>작성자</td>
+                                <td>내용</td>
+                                <td>작성일</td>
+                            </tr>
+                            </thead>
+                            <tbody id="allComments">
+                            </tbody>
+                             <tr>
+                                <td th:text="${session.loginUser.getNick()}"></td>
+                                <td><input type="text" name="comment" id="comment"><button th:onClick="submitComment([[${post}]])">작성</button></td>
+                            </tr>
+                           
+                        </table>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
     
+    showAllComments()
+    
+    function submitComment(post){
+    	var comment = document.getElementById('comment').value
+    	
+    	$.ajax({
+    		type: 'POST',
+    		url: '/comment/add',
+    		contentType: 'application/json',
+    		dataType : "json",
+    		data: JSON.stringify({
+    			comment: comment,
+    			post: post
+    		}),
+    	})
+    	.done((result)=>{
+    	})
+    	.fail((error)=>{
+    		console.log(error);
+    	});
+    }
+    
+    function showAllComments(){
+    	
+    	let comments = document.getElementById("allComments")
+    	comments.innerHTML = '';
+    	
+    	$.ajax({
+    		type: 'GET',
+    		url: '/comment/[[${post.id}]]',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+    	})
+    	.done((result)=>{
+    		console.log("result", result)
+    		var commentBody = '';
+    		result.forEach(function(item){
+    			commentBody += '<tr>' +
+    				'<td>' + item.users.nick + '</td>' + 
+    				'<td>' + item.comment + '</td>' +
+    				'<td>' + item.createAt + '</td>'
+    			+ '</tr>';
+    		})
+    		comments.innerHTML = commentBody;
+    		
+    	})
+    	.fail((error)=>{
+    		console.log("error", error);
+    	});
+    }
     
     </script>
     
