@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### static file ###
-!**/src/main/resources/static/files/
+!**/src/main/**/files/
