@@ -59,5 +59,10 @@ public class IndexController {
 		Model m = model.addAttribute("post", posts);
 		return "update";
 	}
-
+	
+	//회원정보 수정 페이지로 이동 
+	@GetMapping("/update")
+	public String updateUser() {
+		return "userInfoUpdate";
+	}
 }

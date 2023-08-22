@@ -1,6 +1,5 @@
 package com.sjy.shopping.model.entity;
 
-import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,11 +38,16 @@ public class Posts extends BaseEntity {
 	@JoinColumn(name="user_seq")
 	private Users users;
 	
+	@ManyToOne
+	@JoinColumn(name="attach_id")
+	private UploadFile file;
+	
 	@Builder
-	public Posts(String title, String contents, Users users, Category category) {
+	public Posts(String title, String contents, Users users, Category category, UploadFile file) {
 		this.users = users;
 		this.title = title; 
 		this.contents = contents;
 		this.category = category;
+		this.file = file;
 	}
 }

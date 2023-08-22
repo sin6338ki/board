@@ -69,6 +69,7 @@
                 contentType: 'application/json; charset=utf-8',
             })
             .done((result)=>{
+            	console.log("result : ", result)
                 var tableBody = '';
                 result.forEach(function(item){
                     tableBody += '<tr>' +

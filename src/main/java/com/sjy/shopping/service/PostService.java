@@ -1,7 +1,6 @@
 package com.sjy.shopping.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +10,9 @@ import com.sjy.shopping.model.dto.PostReqDto;
 import com.sjy.shopping.model.dto.PostUpdateDto;
 import com.sjy.shopping.model.entity.Category;
 import com.sjy.shopping.model.entity.Posts;
+import com.sjy.shopping.model.entity.UploadFile;
 import com.sjy.shopping.model.entity.Users;
+import com.sjy.shopping.repository.AttachRepository;
 import com.sjy.shopping.repository.CategoryRepository;
 import com.sjy.shopping.repository.PostRepository;
 import com.sjy.shopping.repository.UserRepository;
@@ -25,11 +26,13 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final CategoryRepository categoryRepository;
 	private final UserRepository userRepository;
+	private final AttachRepository attachRepository;
 	
 	@Transactional
 	public Posts addPost(PostReqDto requestDto) {
 		Category category = categoryRepository.findByName(requestDto.getCategory_name());
-		Posts post = new Posts(requestDto.getTitle(), requestDto.getContents(), requestDto.getUser(), category);
+		UploadFile file = attachRepository.save(requestDto.getFile());
+		Posts post = new Posts(requestDto.getTitle(), requestDto.getContents(), requestDto.getUser(), category, file);
 		return postRepository.save(post);
 	}
 	
@@ -54,8 +57,10 @@ public class PostService {
 	@Transactional
 	public void updatePost(PostUpdateDto updateDto) {
 		deletePost(updateDto.getPostId());
+		attachRepository.delete(updateDto.getFile());
 		Category category = categoryRepository.findByName(updateDto.getCategory_name());
-		Posts post = new Posts(updateDto.getTitle(), updateDto.getContents(), updateDto.getUser(), category);
+		UploadFile file = attachRepository.save(updateDto.getFile());
+		Posts post = new Posts(updateDto.getTitle(), updateDto.getContents(), updateDto.getUser(), category, file);
 		postRepository.save(post);
 	}
 	

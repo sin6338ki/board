@@ -56,4 +56,11 @@ public class userController {
 		session.invalidate();
 		response.sendRedirect("/");
 	}
+	
+	//회원정보 수정
+	@PostMapping("/user/update")
+	public void updateUserInfo(HttpSession session, HttpServletResponse response, HttpServletRequest request) throws Exception {
+		userService.updateUserInfo(session, request);
+		logout(response, session);
+	}
 }

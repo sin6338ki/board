@@ -49,8 +49,8 @@
                                 <td th:text="${post.createAt}"></td>
                             </tr>
                             <tr>
-                                <td>이미지</td>
-                                <td></td>
+                                <td>첨부파일(클릭시 다운)</td>
+                                <td><a th:if="${post.file}" th:href="|/attach/${post.id}|" th:text="${post.file.uploadFilename}"/></td>
                             </tr>
                             <tr>
                                 <td colspan="2" class="text-center">
@@ -64,5 +64,11 @@
             </div>
         </div>
     </div>
+    
+    <script>
+    
+    
+    </script>
+    
 </body>
 </html>
