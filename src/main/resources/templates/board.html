@@ -33,7 +33,7 @@
                     <th>글제목</th>
                     <th>작성자</th>
                     <th>작성일시</th>
-                    <th>게시글 보기</th>
+                    <th>조회수</th>
                 </tr>
             </thead>
             <tbody id="allPosts">
@@ -74,10 +74,10 @@
                 result.forEach(function(item){
                     tableBody += '<tr>' +
                         '<td>' + item.category.category_name + '</td>' + 
-                        '<td>' + item.title + '</td>' + 
+                        '<td><a onclick="location.href = \'/post/' + item.id + '\'">' + item.title + '</a></td>' +
                         '<td>' + item.users.userid + '</td>' + 
                         '<td>' + item.createAt + '</td>' +
-                        '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                        '<td>' + item.views + '</td>' +
                         '</tr>';
                 })
                 allPosts.innerHTML = tableBody;
@@ -124,10 +124,10 @@
                 result.forEach(function(item){
                     tableBody += '<tr>' +
                         '<td>' + item.category.category_name + '</td>' + 
-                        '<td>' + item.title + '</td>' + 
+                        '<td><a onclick="location.href = \'/post/' + item.id + '\'">' + item.title + '</a></td>' +
                         '<td>' + item.users.userid + '</td>' + 
                         '<td>' + item.createAt + '</td>' +
-                        '<td><button class="btn btn-info" onclick="location.href = \'/post/' + item.id + '\'">클릭</button>' +
+                        '<td>' + item.views + '</td>' +
                         '</tr>';
                 })
                 allPosts.innerHTML = tableBody;

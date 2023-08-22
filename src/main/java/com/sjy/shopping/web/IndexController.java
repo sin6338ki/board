@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.sjy.shopping.model.entity.Posts;
+import com.sjy.shopping.repository.PostRepository;
 import com.sjy.shopping.service.PostService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class IndexController {
 	
 	private final PostService postService;
+	private final PostRepository postRepository;
 	
 	@GetMapping("/list")
 	public String list() {
@@ -42,6 +44,11 @@ public class IndexController {
 	@GetMapping("/post/{id}")
 	public String findPost(@PathVariable(name="id") Long id, HttpServletResponse response, Model model, HttpSession session) throws Exception {
 		Posts posts = postService.findPost(id);
+		
+		//조회수 1증가
+		posts.setViews(posts.getViews()+1);
+		postRepository.save(posts);
+		
 		Model m = model.addAttribute("post", posts);
 		return "boardContent";
 	}

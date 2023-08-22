@@ -12,8 +12,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name="posts")
@@ -28,6 +30,7 @@ public class Posts extends BaseEntity {
 	@JoinColumn(name="category_id")
 	private Category category;
 	
+	@Column(columnDefinition = "integer default 0", nullable = false)
 	private int views;
 	
 	private String contents;

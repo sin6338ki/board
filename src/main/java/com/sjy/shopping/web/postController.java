@@ -22,7 +22,6 @@ import com.sjy.shopping.model.dto.PostUpdateDto;
 import com.sjy.shopping.model.entity.Posts;
 import com.sjy.shopping.model.entity.UploadFile;
 import com.sjy.shopping.model.entity.Users;
-import com.sjy.shopping.service.AttachService;
 import com.sjy.shopping.service.PostService;
 
 import jakarta.servlet.http.HttpServletRequest;
