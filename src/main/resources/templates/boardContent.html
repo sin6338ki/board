@@ -70,6 +70,7 @@
                                 <td>작성자</td>
                                 <td>내용</td>
                                 <td>작성일</td>
+                                <td></td>
                             </tr>
                             </thead>
                             <tbody id="allComments">
@@ -123,18 +124,24 @@
             contentType: 'application/json; charset=utf-8',
     	})
     	.done((result)=>{
-    		console.log("result", result)
-    		var commentBody = '';
-    		result.forEach(function(item){
-    			commentBody += '<tr>' +
-    				'<td>' + item.users.nick + '</td>' + 
-    				'<td>' + item.comment + '</td>' +
-    				'<td>' + item.createAt + '</td>'
-    			+ '</tr>';
-    		})
-    		comments.innerHTML = commentBody;
-    		
-    	})
+    		var sessionUserNick = '[[${session.loginUser.getNick()}]]';
+            console.log("result", result)
+            var commentBody = '';
+            result.forEach(function(item){
+                commentBody += '<tr>' +
+                    '<td>' + item.users.nick + '</td>' + 
+                    '<td>' + item.comment + '</td>' +
+                    '<td>' + item.createAt + '</td>' +
+                    '<td>';
+
+                if (sessionUserNick === item.users.nick) {
+                    commentBody += '<button>삭제</button>';
+                }
+
+                commentBody += '</td></tr>';
+            })
+            comments.innerHTML = commentBody;
+        })
     	.fail((error)=>{
     		console.log("error", error);
     	});
