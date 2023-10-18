@@ -7,7 +7,7 @@
 * 분류 : 개인 프로젝트
 
 ## 시스템 아키텍쳐
-![image](https://github.com/sin6338ki/board/assets/130349912/4ce05edf-bbfb-4b8a-a637-a0f312531ad5)
+![image](https://github.com/sin6338ki/board/assets/130349912/52239e2a-9151-4020-b526-e5da83f86ece)
 
 ## ERD
 ![image](https://github.com/sin6338ki/board/assets/130349912/f0abc033-257b-400d-8bd4-1ce662eb4772)
